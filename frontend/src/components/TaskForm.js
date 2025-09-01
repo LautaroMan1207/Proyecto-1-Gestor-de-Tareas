@@ -9,7 +9,7 @@ function TaskForm({ editMode = false }) {
 
   useEffect(() => {
     if (editMode && id) {
-      axios.get('https://gestor-tareas-backend.onrender.com/api/tasks')
+      axios.get(`${process.env.REACT_APP_API_URL}`)
         .then(res => setTitle(res.data.title))
         .catch(err => console.log(err));
     }
