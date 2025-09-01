@@ -17,4 +17,4 @@ Control de versiones: Git + GitHub
 
 **Estructura del proyecto**
 
-<img src="./doc/figuras/Estructura.png">
+<img src="./doc/figuras/Estructura.png" align="left" height="40">
