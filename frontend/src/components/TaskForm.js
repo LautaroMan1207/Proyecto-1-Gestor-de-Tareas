@@ -1,48 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from 'react';
 
-function TaskForm({ editMode = false }) {
+function TaskForm({ onAdd }) {
   const [title, setTitle] = useState('');
-  const { id } = useParams();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (editMode && id) {
-      axios.get(`${process.env.REACT_APP_API_URL}`)
-        .then(res => setTitle(res.data.title))
-        .catch(err => console.log(err));
-    }
-  }, [editMode, id]);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title) return;
-
-    try {
-      if (editMode) {
-        await axios.put(`https://gestor-tareas-backend.onrender.com/api/tasks/${id}`, { title });
-      } else {
-        await axios.post('https://gestor-tareas-backend.onrender.com/api/tasks', { title });
-      }
-      navigate('/');
-    } catch (err) {
-      console.log(err);
-    }
+    if (!title.trim()) return;
+    onAdd({ title, completed: false });
+    setTitle('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         value={title}
-        onChange={e => setTitle(e.target.value)}
-        placeholder="Título de la tarea"
-        className="flex-1 border p-2 rounded"
+        placeholder="Nueva tarea..."
+        onChange={(e) => setTitle(e.target.value)}
       />
-      <button type="submit" className="bg-blue-600 text-white px-4 rounded">
-        {editMode ? 'Actualizar' : 'Agregar'}
-      </button>
+      <button type="submit">Agregar</button>
     </form>
   );
 }

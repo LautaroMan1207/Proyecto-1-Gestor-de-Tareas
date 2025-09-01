@@ -1,20 +1,38 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import TaskList from './components/TaskList';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    axios.get(API_URL).then((res) => setTasks(res.data));
+  }, []);
+
+  const addTask = async (task) => {
+    const res = await axios.post(API_URL, task);
+    setTasks([...tasks, res.data]);
+  };
+
+  const updateTask = async (id, updatedTask) => {
+    const res = await axios.put(`${API_URL}/${id}`, updatedTask);
+    setTasks(tasks.map((t) => (t._id === id ? res.data : t)));
+  };
+
+  const deleteTask = async (id) => {
+    await axios.delete(`${API_URL}/${id}`);
+    setTasks(tasks.filter((t) => t._id !== id));
+  };
+
   return (
-    <Router>
-      <div className="p-6 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Gestor de Tareas</h1>
-        <Routes>
-          <Route path="/" element={<TaskList />} />
-          <Route path="/add" element={<TaskForm />} />
-          <Route path="/edit/:id" element={<TaskForm editMode={true} />} />
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+      <h1>Gestor de Tareas</h1>
+      <TaskForm onAdd={addTask} />
+      <TaskList tasks={tasks} onUpdate={updateTask} onDelete={deleteTask} />
+    </div>
   );
 }
 
