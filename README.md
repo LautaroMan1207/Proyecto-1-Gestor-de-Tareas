@@ -17,19 +17,4 @@ Control de versiones: Git + GitHub
 
 **Estructura del proyecto**
 
-gestor-tareas/
-├── backend/
-│   ├── server.js
-│   ├── routes/
-│   │   └── tasks.js
-│   ├── models/
-│   │   └── Task.js
-│   └── package.json
-└── frontend/
-    ├── src/
-    │   ├── App.js
-    │   ├── components/
-    │   │   ├── TaskList.js
-    │   │   └── TaskForm.js
-    │   └── index.js
-    └── package.json
+<img src="./doc/figuras/Estructura.png">
